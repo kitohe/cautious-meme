@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Messaging.API.Services;
 
 namespace Messaging.API.Controllers
 {
@@ -11,29 +9,31 @@ namespace Messaging.API.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
+        private readonly IWeatherForecastService _weatherService;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(IWeatherForecastService weatherForecastService, ILogger<WeatherForecastController> logger)
         {
+            _weatherService = weatherForecastService;
             _logger = logger;
         }
+
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            List<WeatherForecast> weathers = new();
+            
+            for (int i = 0; i < 10; i++)
+                weathers.Add(_weatherService.GetWeather());
+
+            return weathers;
+        }
+
+        [HttpGet("GetRandomString")]
+        public string GetRandomString()
+        {
+            return "SUper random string";
         }
     }
 }
