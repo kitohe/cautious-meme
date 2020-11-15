@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  seq:
+    image: datalust/seq:latest
+
+  messaging.api:
+    image: ${DOCKER_REGISTRY-}messagingapi
+    build:
+      context: .
+      dockerfile: Services/Messaging/Messaging.API/Dockerfile
+
+
+  cassandra:
+    image: cassandra:latest
+  
+networks:
+  default:
+    external:
+      name: cmessaging
