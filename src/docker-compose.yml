@@ -10,6 +10,10 @@ services:
       context: .
       dockerfile: Services/Messaging/Messaging.API/Dockerfile
 
+
+  cassandra:
+    image: cassandra:latest
+  
 networks:
   default:
     external:

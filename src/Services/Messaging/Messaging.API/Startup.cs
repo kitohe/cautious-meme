@@ -1,4 +1,3 @@
-using Messaging.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,8 +19,6 @@ namespace Messaging.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            services.AddTransient<IWeatherForecastService, WeatherForecastService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

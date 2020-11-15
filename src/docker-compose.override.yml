@@ -4,8 +4,19 @@ services:
   seq:
     environment:
       - ACCEPT_EULA=Y
+    restart: always
     ports:
       - "5340:80"
+    
+  cassandra:
+    environment:
+      - "MAX_HEAP_SIZE=256M"
+      - "HEAP_NEWSIZE=128M"
+    ports:
+      - "9042:9042"
+    restart: always
+    volumes:
+      - ./out/cassandra_data:/var/lib/cassandra
 
   messaging.api:
     environment:
