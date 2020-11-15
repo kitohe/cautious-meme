@@ -1,4 +1,5 @@
 using System.Linq;
+using Cassandra.Metrics;
 using Xunit;
 using Messaging.Test.Helper;
 using Xunit.Abstractions;
@@ -15,7 +16,7 @@ namespace Messaging.Test
         }
 
         [Fact]
-        public void Test()
+        public void CassandraBasicFunctionality_Success()
         {
             // Arrange
             var cluster = CassandraHelper.ConnectToDatabase();
@@ -23,8 +24,11 @@ namespace Messaging.Test
             var keyspaceName = "test_keyspace";
             var tableName = "test_table";
 
+            session.DeleteKeyspaceIfExists(keyspaceName);
+
+            session.CreateKeyspace(keyspaceName);
             session.ChangeKeyspace(keyspaceName);
-            session.CreateKeyspaceIfNotExists(keyspaceName);
+
             CassandraHelper.DropTableIfExists(session, keyspaceName, tableName);
 
             session.Execute("CREATE TABLE test_table (id int PRIMARY KEY, first_name text, last_name text)");
