@@ -10,10 +10,15 @@ services:
       context: .
       dockerfile: Services/Messaging/Messaging.API/Dockerfile
 
-
   cassandra:
     image: cassandra:latest
   
+  identity.api:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: Services/Identity/Identity.API/Dockerfile
+
 networks:
   default:
     external:
