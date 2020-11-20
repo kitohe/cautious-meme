@@ -2,13 +2,26 @@ version: '3.8'
 
 services:
   seq:
+    container_name: seq
     environment:
       - ACCEPT_EULA=Y
     restart: always
     ports:
       - "5340:80"
     
+  mssql:
+    container_name: mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    restart: always
+    volumes:
+      - cmessaging-mssql-data:/var/opt/mssql
+
   cassandra:
+    container_name: cassandra
     environment:
       - "MAX_HEAP_SIZE=256M"
       - "HEAP_NEWSIZE=128M"
@@ -16,7 +29,7 @@ services:
       - "9042:9042"
     restart: always
     volumes:
-      - ./out/cassandra_data:/var/lib/cassandra
+      - cmessaging-cassandra-data:/var/lib/cassandra
 
   messaging.api:
     environment:
@@ -25,6 +38,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "5001:80"
+    restart: always
 
   identity.api:
     environment:
@@ -33,3 +47,10 @@ services:
       - ASPNETCORE_URLS=http://+:80
     ports:
       - "5000:80"
+    restart: always
+
+volumes:
+  cmessaging-cassandra-data:
+    external: false
+  cmessaging-mssql-data:
+    external: false

@@ -4,14 +4,17 @@ services:
   seq:
     image: datalust/seq:latest
 
+  cassandra:
+    image: cassandra:latest
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
   messaging.api:
     image: ${DOCKER_REGISTRY-}messagingapi
     build:
       context: .
       dockerfile: Services/Messaging/Messaging.API/Dockerfile
-
-  cassandra:
-    image: cassandra:latest
   
   identity.api:
     image: ${DOCKER_REGISTRY-}identityapi
