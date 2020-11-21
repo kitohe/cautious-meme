@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
 using System.Reflection;
 using Identity.API.Data;
 using Identity.API.Models;
-using IdentityServer4.AspNetIdentity;
+using Identity.API.Services;
+using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -45,12 +48,15 @@ namespace Identity.API
                 app.UseDeveloperExceptionPage();
             }
 
+            InitializeDatabase(app);
+            
             app.UseStaticFiles();
-            app.UseIdentityServer();
+            app.UseRouting();
             app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
-            app.UseRouting();
+            app.UseIdentityServer();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
@@ -59,26 +65,62 @@ namespace Identity.API
                 });
             });
         }
+
+        private void InitializeDatabase(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+
+            var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+            context.Database.Migrate();
+            if (!context.Clients.Any())
+            {
+                foreach (var client in Config.Clients)
+                {
+                    context.Clients.Add(client.ToEntity());
+                }
+
+                context.SaveChanges();
+            }
+
+            if (!context.IdentityResources.Any())
+            {
+                foreach (var resource in Config.Ids)
+                {
+                    context.IdentityResources.Add(resource.ToEntity());
+                }
+
+                context.SaveChanges();
+            }
+
+            if (!context.ApiResources.Any())
+            {
+                foreach (var resource in Config.Apis)
+                {
+                    context.ApiResources.Add(resource.ToEntity());
+                }
+
+                context.SaveChanges();
+            }
+        }
     }
 
     static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddDatabase(this IServiceCollection services,
+        public static void AddDatabase(this IServiceCollection services,
             IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("ConnectonString"),
+                options.UseSqlServer(configuration["ConnectionString"],
                     sqlServerOptionsAction: sqlOptions =>
                     {
                         sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30),
                             errorNumbersToAdd: null);
                     }));
-
-            return services;
         }
 
-        public static IServiceCollection AddCustomIdentityServer(this IServiceCollection services,
+        public static void AddCustomIdentityServer(this IServiceCollection services,
             IConfiguration configuration)
         {
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -92,7 +134,7 @@ namespace Identity.API
                 .AddAspNetIdentity<ApplicationUser>()
                 .AddSigningCredential(Certificate.Certificate.Get(configuration["CertificateName"],
                     configuration["CertificatePassword"]))
-                .AddProfileService<ProfileService<ApplicationUser>>()
+                .AddProfileService<ProfileService>()
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString,
@@ -113,8 +155,6 @@ namespace Identity.API
                                 errorNumbersToAdd: null);
                         });
                 });
-
-            return services;
         }
     }
 }

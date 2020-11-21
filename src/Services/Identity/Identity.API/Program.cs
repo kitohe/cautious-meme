@@ -1,27 +1,41 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace Identity.API
 {
     public class Program
-    {        
-        public static readonly string Namespace = typeof(Program).Namespace;
-        public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
+    {
+        private static readonly string Namespace = typeof(Program).Namespace;
+        private static readonly string AppName = Namespace.
+            Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var configuration = GetConfiguration();
 
             Log.Logger = CreateSerilogLogger(configuration);
 
+            var host = CreateHostBuilder(args, configuration).Build();
+
+            var seedTrigger = Environment.GetEnvironmentVariable("SEED_DATABASE");
+            if (!string.IsNullOrEmpty(seedTrigger) && seedTrigger == "true")
+            {
+                using var scope = host.Services.CreateScope();
+                
+                await SeedData.SeedUserRoles(scope.ServiceProvider, configuration);
+                await SeedData.SeedAdminAccount(scope.ServiceProvider, configuration);
+            }
+
             try
             {
                 Log.Information($"[{AppName}] Starting web host");
-                CreateHostBuilder(args, configuration).Build().Run();
+                await host.RunAsync();
             }
             catch (Exception e)
             {
@@ -31,7 +45,7 @@ namespace Identity.API
             Log.CloseAndFlush();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration) =>
+        private static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

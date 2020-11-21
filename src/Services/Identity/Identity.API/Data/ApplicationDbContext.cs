@@ -13,14 +13,14 @@ namespace Identity.API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
-            builder.Entity<IdentityUser>().ToTable("Users", "dbo");
-            builder.Entity<IdentityRole>().ToTable("Roles", "dbo");
-            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles", "dbo");
-            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", "dbo");
-            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims", "dbo");
-            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins", "dbo");
-            builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", "dbo");
+
+            builder.Entity<ApplicationUser>().ToTable("Users");
+            builder.Entity<IdentityRole>().ToTable("Roles");
+            builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles");
+            builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims");
+            builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims");
+            builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
+            builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
         }
     }
 }
