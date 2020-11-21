@@ -17,6 +17,8 @@ jobs:
       run: docker network create cmessaging
     - name: Run docker-compose
       run: docker-compose -f src/docker-compose.yml up&
+    - name: Wait for setup
+      run: sleep 6m
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
