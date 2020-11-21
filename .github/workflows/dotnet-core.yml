@@ -14,4 +14,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run docker-compose
-      run: docker-compose -f src/docker-compose.yml up --exit-code-from web
+      run: docker-compose -f src/docker-compose.yml up
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+    - name: Run tests
+      run: dotnet test src/Services/Messaging/Messaging.Test
+    - name: Exit
+      run: docker-compose -f src/docker-compose.yml down
