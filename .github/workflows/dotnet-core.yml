@@ -13,13 +13,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET 5
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+    - name: Run docker-compose
+      run: docker-compose up --exit-code-from web
