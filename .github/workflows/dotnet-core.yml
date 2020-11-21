@@ -13,16 +13,19 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup network
-      run: docker network create cmessaging
-    - name: Run docker-compose
-      run: docker-compose -f src/docker-compose.yml up
-    - name: Setup .NET
+      
+    - name: Setup .NET 5
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.100
-    - name: Run tests
-      run: dotnet test src/Services/Messaging/Messaging.Test
-    - name: Exit
-      run: docker-compose -f src/docker-compose.yml down
 
+
+    - name: Restore Identity.API
+      run: dotnet restore ./src/Services/Identity/Identity.API
+    - name: Build Identity.API
+      run: dotnet build --configuration Release --no-restore ./src/Services/Identity/Identity.API
+      
+    - name: Restore Messaging.API
+      run: dotnet restore ./src/Services/Messaging/Messaging.API
+    - name: Build Messaging.API
+      run: dotnet build --configuration Release --no-restore ./src/Services/Messaging/Messaging.API
