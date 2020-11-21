@@ -1,5 +1,4 @@
 using System.Linq;
-using Cassandra.Metrics;
 using Xunit;
 using Messaging.Test.Helper;
 using Xunit.Abstractions;

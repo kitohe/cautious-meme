@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.API", "Services\Messaging\Messaging.API\Messaging.API.csproj", "{B012D768-1EA4-4723-AC0B-37B192F378E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messaging.API", "Services\Messaging\Messaging.API\Messaging.API.csproj", "{B012D768-1EA4-4723-AC0B-37B192F378E1}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{305E5A5F-D2D1-4FA9-BE45-884CA976CF38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.Test", "Services\Messaging\Messaging.Test\Messaging.Test.csproj", "{16204117-4A96-4989-A319-FEA8B10E1EF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messaging.Test", "Services\Messaging\Messaging.Test\Messaging.Test.csproj", "{16204117-4A96-4989-A319-FEA8B10E1EF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{16204117-4A96-4989-A319-FEA8B10E1EF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16204117-4A96-4989-A319-FEA8B10E1EF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16204117-4A96-4989-A319-FEA8B10E1EF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
