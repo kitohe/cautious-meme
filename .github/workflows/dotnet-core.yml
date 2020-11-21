@@ -16,7 +16,7 @@ jobs:
     - name: Setup network
       run: docker network create cmessaging
     - name: Run docker-compose
-      run: docker-compose -f src/docker-compose.yml up
+      run: docker-compose -f src/docker-compose.yml up&
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
