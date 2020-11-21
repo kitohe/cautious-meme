@@ -14,4 +14,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run docker-compose
-      run: docker-compose up --exit-code-from web
+      run: docker-compose -f src/docker-compose.yml up --exit-code-from web
