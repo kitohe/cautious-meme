@@ -41,6 +41,7 @@ namespace Identity.API
             services.AddCustomIdentityServer(Configuration);
 
             services.AddScoped<IRegisterService, RegisterService>();
+            services.AddScoped<ILoginService<ApplicationUser>, LoginService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
