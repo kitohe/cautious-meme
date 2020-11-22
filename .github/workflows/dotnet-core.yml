@@ -1,0 +1,31 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET 5
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.100
+
+
+    - name: Restore Identity.API
+      run: dotnet restore ./src/Services/Identity/Identity.API
+    - name: Build Identity.API
+      run: dotnet build --configuration Release --no-restore ./src/Services/Identity/Identity.API
+      
+    - name: Restore Messaging.API
+      run: dotnet restore ./src/Services/Messaging/Messaging.API
+    - name: Build Messaging.API
+      run: dotnet build --configuration Release --no-restore ./src/Services/Messaging/Messaging.API
