@@ -19,12 +19,13 @@ jobs:
       with:
         dotnet-version: 5.0.100
 
+
     - name: Restore Identity.API
       run: dotnet restore ./src/Services/Identity/Identity.API
     - name: Build Identity.API
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore ./src/Services/Identity/Identity.API
       
     - name: Restore Messaging.API
       run: dotnet restore ./src/Services/Messaging/Messaging.API
     - name: Build Messaging.API
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore ./src/Services/Messaging/Messaging.API
