@@ -39,6 +39,8 @@ namespace Identity.API
                 .AddDefaultTokenProviders();
 
             services.AddCustomIdentityServer(Configuration);
+
+            services.AddScoped<IRegisterService, RegisterService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,10 +61,8 @@ namespace Identity.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
         }
 

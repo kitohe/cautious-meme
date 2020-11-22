@@ -22,7 +22,14 @@ services:
       context: .
       dockerfile: Services/Identity/Identity.API/Dockerfile
 
+  blazorclient:
+    image: ${DOCKER_REGISTRY-}blazorclient
+    build:
+      context: .
+      dockerfile: Web/BlazorClient/Dockerfile
+
 networks:
   default:
     external:
       name: cmessaging
+

@@ -45,13 +45,20 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ASPNETCORE_URLS=http://+:80
-      - SEED_DATABASE=true
+      - SEED_DATABASE=false
     ports:
       - "5000:80"
     restart: always
+
+  blazorclient:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5500:80"
 
 volumes:
   cmessaging-cassandra-data:
     external: false
   cmessaging-mssql-data:
     external: false
+

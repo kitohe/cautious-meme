@@ -39,8 +39,6 @@
   <ItemGroup>
     <Folder Include="Data\Entities\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
 </Project>
