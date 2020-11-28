@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messaging.Test", "Services\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorClient", "Web\BlazorClient\BlazorClient.csproj", "{942ECEAC-A216-488B-92A4-5CC148A931FB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +33,6 @@ Global
 		{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B17ED0B-BED3-4F88-AB22-EB887EE4AF72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{942ECEAC-A216-488B-92A4-5CC148A931FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{942ECEAC-A216-488B-92A4-5CC148A931FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{942ECEAC-A216-488B-92A4-5CC148A931FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{942ECEAC-A216-488B-92A4-5CC148A931FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

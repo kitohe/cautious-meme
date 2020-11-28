@@ -5,6 +5,6 @@ namespace Identity.API.Services
 {
     public interface ILoginService<in T>
     {
-        Task<string> SignInAsync(LoginViewModel viewModel);
+        Task<string> LoginAsync(LoginViewModel viewModel);
     }
 }

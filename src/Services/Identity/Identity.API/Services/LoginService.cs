@@ -31,7 +31,7 @@ namespace Identity.API.Services
             _interaction = interaction;
         }
 
-        public async Task<string> SignInAsync(LoginViewModel viewModel)
+        public async Task<string> LoginAsync(LoginViewModel viewModel)
         {
             var user = await _userManager.FindByEmailAsync(viewModel.Email);
 
@@ -55,7 +55,7 @@ namespace Identity.API.Services
                 props.IsPersistent = true;
             };
 
-            _logger.LogInformation($"Logging user with username: {user.UserName}");
+            _logger.LogInformation($"Logging in user with username: {user.UserName}");
             await _signInManager.SignInAsync(user, props);
 
             return _interaction.IsValidReturnUrl(viewModel.ReturnUrl) ? viewModel.ReturnUrl : string.Empty;
