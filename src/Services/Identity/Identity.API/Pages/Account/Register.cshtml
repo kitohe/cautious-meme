@@ -1,18 +1,43 @@
-﻿@model dynamic
-
+﻿@model Identity.API.Models.AccountViewModels.RegisterViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Register";
 }
 
 <!DOCTYPE html>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+<div class="container mt-3">
+    <partial name="_ValidationSummary" />
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <h3>Register</h3>
+            <div>
+                <form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                    <input type="hidden" asp-for="ReturnUrl" />
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="form-check-label"></label>
+                        <input class="form-control" placeholder="Username" asp-for="Email" autofocus>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Password" class="form-check-label"></label>
+                        <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="form-check-label"></label>
+                        <input type="password" class="form-control" placeholder="Confirm Password" asp-for="ConfirmPassword" autocomplete="off">
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <p>Already have account? <a asp-action="Login" asp-controller="Account" asp-route-returnurl="@ViewData["ReturnUrl"]">Login here</a></p>
+
+                    <button class="btn btn-outline-primary" name="button" value="Validate" type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>

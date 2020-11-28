@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using Identity.API.Models;
-using Identity.API.Models.AccountModels;
 using Identity.API.Models.AccountViewModels;
 using Identity.API.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -12,8 +10,6 @@ using Microsoft.Extensions.Logging;
 namespace Identity.API.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/v1/[controller]")]
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
@@ -40,7 +36,7 @@ namespace Identity.API.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return BadRequest();
 
@@ -62,11 +58,11 @@ namespace Identity.API.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginViewModel viewModel)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            var redirect = await _loginService.SignInAsync(model);
+            var redirect = await _loginService.SignInAsync(viewModel);
 
             var url = string.IsNullOrEmpty(redirect) ? "~/" : redirect;
 

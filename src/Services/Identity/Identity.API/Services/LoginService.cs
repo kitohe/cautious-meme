@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Identity.API.Models;
-using Identity.API.Models.AccountModels;
+using Identity.API.Models.AccountViewModels;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -31,11 +31,11 @@ namespace Identity.API.Services
             _interaction = interaction;
         }
 
-        public async Task<string> SignInAsync(LoginModel model)
+        public async Task<string> SignInAsync(LoginViewModel viewModel)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(viewModel.Email);
 
-            if (!await _userManager.CheckPasswordAsync(user, model.Password))
+            if (!await _userManager.CheckPasswordAsync(user, viewModel.Password))
                 return string.Empty;
 
             var tokenLifetime = _configuration.GetValue("TokenLifetimeMinutes", 120);
@@ -44,10 +44,10 @@ namespace Identity.API.Services
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(tokenLifetime),
                 AllowRefresh = true,
-                RedirectUri = model.ReturnUrl
+                RedirectUri = viewModel.ReturnUrl
             };
 
-            if (model.RememberMe)
+            if (viewModel.RememberMe)
             {
                 var permanentTokenLifetime = _configuration.GetValue("PermanentTokenLifetimeDays", 365);
 
@@ -55,9 +55,10 @@ namespace Identity.API.Services
                 props.IsPersistent = true;
             };
 
+            _logger.LogInformation($"Logging user with username: {user.UserName}");
             await _signInManager.SignInAsync(user, props);
 
-            return _interaction.IsValidReturnUrl(model.ReturnUrl) ? model.ReturnUrl : string.Empty;
+            return _interaction.IsValidReturnUrl(viewModel.ReturnUrl) ? viewModel.ReturnUrl : string.Empty;
         }
     }
 }

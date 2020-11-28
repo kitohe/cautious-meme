@@ -5,6 +5,6 @@ namespace Identity.API.Services
 {
     public interface IRegisterService
     {
-        Task RegisterUser(RegisterModel model);
+        Task RegisterUser(RegisterViewModel model);
     }
 }

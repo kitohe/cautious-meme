@@ -22,7 +22,7 @@ namespace Identity.API.Services
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
         }
 
-        public async Task RegisterUser(RegisterModel model)
+        public async Task RegisterUser(RegisterViewModel model)
         {
             var user = GetUserFromViewModel(model);
 
@@ -39,9 +39,9 @@ namespace Identity.API.Services
             _logger.LogInformation($"Registered new user, confirmation code: {confirmationCode}");
         }
 
-        private ApplicationUser GetUserFromViewModel(RegisterModel model)
+        private ApplicationUser GetUserFromViewModel(RegisterViewModel model)
         {
-            return new ApplicationUser()
+            return new()
             {
                 UserName = model.UserName,
                 Email = model.Email,

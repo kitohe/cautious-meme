@@ -6,6 +6,7 @@ using Identity.API.Models;
 using Identity.API.Services;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -40,8 +41,7 @@ namespace Identity.API
 
             services.AddCustomIdentityServer(Configuration);
 
-            services.AddScoped<IRegisterService, RegisterService>();
-            services.AddScoped<ILoginService<ApplicationUser>, LoginService>();
+            services.RegisterServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -156,6 +156,15 @@ namespace Identity.API
                                 errorNumbersToAdd: null);
                         });
                 });
+        }
+
+        public static void RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<IRegisterService, RegisterService>();
+            services.AddScoped<ILoginService<ApplicationUser>, LoginService>();
+            services.AddScoped<IRedirectService, RedirectService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IProfileService, ProfileService>();
         }
     }
 }
