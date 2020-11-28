@@ -102,6 +102,14 @@ namespace Identity.API.Controllers
             return Redirect(url);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult ForgotPassword(string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
         private void AddErrorsToModel(IEnumerable<IdentityError> errors)
         {
             foreach (var error in errors)
