@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Identity.API.Models;
 using Identity.API.Models.AccountViewModels;
 using Identity.API.Services;
-using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
