@@ -1,4 +1,5 @@
 using System;
+using ClientApp.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,7 @@ namespace ClientApp
 
             services.AddCustomMvc(Configuration);
             services.AddCustomAuthentication(Configuration);
+            services.AddHttpClientServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,8 +72,8 @@ namespace ClientApp
         public static void AddCustomAuthentication(this IServiceCollection services,
             IConfiguration configuration)
         {
-            var identityUrl = configuration.GetValue<string>("IdentityUrl");
-            var callBackUrl = configuration.GetValue<string>("CallBackUrl");
+            var identityUrl = configuration.GetValue<string>("IDENTITY_URL");
+            var callBackUrl = configuration.GetValue<string>("CALLBACK_URL");
             var sessionCookieLifetime = configuration.GetValue("SessionCookieLifetimeMinutes", 60);
 
             services.AddAuthentication(options =>
@@ -79,7 +81,7 @@ namespace ClientApp
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = "oidc";
                 })
-                .AddCookie(setup => setup.ExpireTimeSpan = TimeSpan.FromMinutes(sessionCookieLifetime))
+                .AddCookie("Cookie")
                 .AddOpenIdConnect("oidc", options =>
                 {
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -89,7 +91,8 @@ namespace ClientApp
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.ClientId = "cmessaging";
                     options.ClientSecret = "secret";
-                    options.ResponseType = "code id_token";
+                    options.ResponseType = "code";
+                    options.UsePkce = true;
                     options.SaveTokens = true;
                     options.Scope.Add("messaging.api");
                     options.Scope.Add("offline_access");
@@ -100,6 +103,13 @@ namespace ClientApp
                         RoleClaimType = "role"
                     };
                 });
+
+            services.AddAccessTokenManagement();
+
+            // services.AddUserAccessTokenClient("client", client =>
+            // {
+            //     client.BaseAddress = new Uri(Constants.SampleApi);
+            // });
         }
 
         public static void AddCustomMvc(this IServiceCollection services, IConfiguration configuration)
@@ -119,6 +129,19 @@ namespace ClientApp
                     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
                     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
                 });
+        }
+
+        public static void AddHttpClientServices(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //register delegating handlers
+            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+            services.AddTransient<HttpClientRequestIdDelegatingHandler>();
+
+            //set 5 min as the lifetime for each HttpMessageHandler int the pool
+            services.AddHttpClient("extendedhandlerlifetime").SetHandlerLifetime(TimeSpan.FromMinutes(5));
         }
     }
 }

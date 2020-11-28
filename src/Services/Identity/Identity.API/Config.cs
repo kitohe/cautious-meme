@@ -14,28 +14,28 @@ namespace Identity.API
                 new IdentityResources.Profile(),
             };
 
-        public static IEnumerable<ApiResource> Apis =>
-            new List<ApiResource>
+        public static IEnumerable<ApiScope> Apis =>
+            new List<ApiScope>
             {
-                new ApiResource("messaging.api", "Messaging API"),
+                new("messaging.api", "Messaging API"),
             };
 
         public static IEnumerable<Client> Clients =>
             new List<Client>
             {
                 // interactive ASP.NET Core MVC client
-                new Client
+                new()
                 {
                     ClientId = "cmessaging",
                     ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    AllowedGrantTypes = GrantTypes.Code,
                     RequireConsent = false,
 
                     // where to redirect to after login
-                    RedirectUris = { "http://localhost:5001/signin-oidc" },
+                    RedirectUris = { "http://localhost:5500/signin-oidc" },
 
                     // where to redirect to after logout
-                    PostLogoutRedirectUris = { "http://localhost:5001/signout-callback-oidc" },
+                    PostLogoutRedirectUris = { "http://localhost:5500/signout-callback-oidc" },
 
                     AllowedScopes = new List<string>
                     {
@@ -48,10 +48,11 @@ namespace Identity.API
 
                     Claims = new List<ClientClaim>
                     {
-                        new ClientClaim(JwtClaimTypes.Role, "Admin"),
-                        new ClientClaim(JwtClaimTypes.Role, "User"),
+                        new(JwtClaimTypes.Role, "Admin"),
+                        new(JwtClaimTypes.Role, "User"),
                     },
-                    AlwaysSendClientClaims = true
+                    AlwaysSendClientClaims = true,
+                    RequirePkce = true
                 }
             };
     }

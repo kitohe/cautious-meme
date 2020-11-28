@@ -110,11 +110,11 @@ namespace Identity.API
                 context.SaveChanges();
             }
 
-            if (!context.ApiResources.Any())
+            if (!context.ApiScopes.Any())
             {
                 foreach (var resource in Config.Apis)
                 {
-                    context.ApiResources.Add(resource.ToEntity());
+                    context.ApiScopes.Add(resource.ToEntity());
                 }
 
                 context.SaveChanges();

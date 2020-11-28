@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Account\Register.cshtml" />
+    <Content Remove="Views\Account\Register.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,15 +48,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\Account\Register.cshtml" />
+    <UpToDateCheckInput Remove="Views\Account\Register.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\Account\Register.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Account\Register.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\Account\Register.cshtml" />
+    <None Include="Views\Account\Register.cshtml" />
   </ItemGroup>
 
 </Project>
