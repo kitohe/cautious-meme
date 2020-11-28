@@ -20,20 +20,14 @@ namespace Identity.API.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IRegisterService _registerService;
         private readonly ILoginService<ApplicationUser> _loginService;
-        private readonly IIdentityServerInteractionService _interaction;
-        private readonly IClientStore _clientStore;
 
         public AccountController(ILogger<AccountController> logger,
             IRegisterService registerService,
-            ILoginService<ApplicationUser> loginService,
-            IIdentityServerInteractionService interaction,
-            IClientStore clientStore)
+            ILoginService<ApplicationUser> loginService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _registerService = registerService ?? throw new ArgumentNullException(nameof(registerService));
             _loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
-            _interaction = interaction ?? throw new ArgumentNullException(nameof(interaction));
-            _clientStore = clientStore ?? throw new ArgumentNullException(nameof(clientStore));
         }
 
         [AllowAnonymous]
