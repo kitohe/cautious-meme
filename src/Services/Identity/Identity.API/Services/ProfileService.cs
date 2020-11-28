@@ -12,13 +12,13 @@ using Identity.API.Models;
 
 namespace Identity.API.Services
 {
-public class ProfileService : IProfileService
+    public class ProfileService : IProfileService
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
         public ProfileService(UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
@@ -79,6 +79,9 @@ public class ProfileService : IProfileService
 
             if (!string.IsNullOrWhiteSpace(user.LastName))
                 claims.Add(new Claim("last_name", user.LastName));
+
+            if (!string.IsNullOrWhiteSpace(user.Country))
+                claims.Add(new Claim("country", user.Country));
 
             if (_userManager.SupportsUserRole)
             {

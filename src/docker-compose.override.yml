@@ -45,7 +45,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ASPNETCORE_URLS=http://+:80
-      - SEED_DATABASE=true
+      - CLIENT_APP={APP_EXTERNAL_DNS_NAME_OR_IP}:5500
+      - SEED_DATABASE=false
     ports:
       - "5000:80"
     restart: always
@@ -55,3 +56,4 @@ volumes:
     external: false
   cmessaging-mssql-data:
     external: false
+

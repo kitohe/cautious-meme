@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\Account\Register.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Certificate\devel_cert.pfx" />
   </ItemGroup>
 
@@ -39,8 +43,19 @@
   <ItemGroup>
     <Folder Include="Data\Entities\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="Views\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Account\Register.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Account\Register.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Account\Register.cshtml" />
   </ItemGroup>
 
 </Project>

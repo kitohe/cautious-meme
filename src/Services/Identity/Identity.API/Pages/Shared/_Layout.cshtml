@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MinerFusion</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    </head>
+
+    <body>
+        <header>
+            <div class="navbar navbar-expand-sm navbar-dark bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="ReturnToOriginalApplication" asp-route-returnUrl="@ViewData["ReturnUrl"]">Chat</a>
+                </div>
+            </div>
+        </header>
+
+        <main role="main" class="main">
+            @RenderBody()
+        </main>
+    </body>
+</html>

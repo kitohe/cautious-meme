@@ -6,6 +6,7 @@ using Identity.API.Models;
 using Identity.API.Services;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +40,8 @@ namespace Identity.API
                 .AddDefaultTokenProviders();
 
             services.AddCustomIdentityServer(Configuration);
+
+            services.RegisterServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,14 +58,13 @@ namespace Identity.API
             app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
             app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
         }
 
@@ -155,6 +157,15 @@ namespace Identity.API
                                 errorNumbersToAdd: null);
                         });
                 });
+        }
+
+        public static void RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<IRegisterService, RegisterService>();
+            services.AddScoped<ILoginService<ApplicationUser>, LoginService>();
+            services.AddScoped<IRedirectService, RedirectService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IProfileService, ProfileService>();
         }
     }
 }
