@@ -31,6 +31,13 @@ services:
     volumes:
       - cmessaging-cassandra-data:/var/lib/cassandra
 
+  redis:
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - cmessaging-redis-data:/data
+
   messaging.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -65,4 +72,6 @@ volumes:
   cmessaging-cassandra-data:
     external: false
   cmessaging-mssql-data:
+    external: false
+  cmessaging-redis-data:
     external: false

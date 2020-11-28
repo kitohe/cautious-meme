@@ -10,6 +10,9 @@ services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
 
+  redis:
+    image: redis:alpine
+
   messaging.api:
     image: ${DOCKER_REGISTRY-}messagingapi
     build:
