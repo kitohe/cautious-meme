@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Messaging.API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class TestController : ControllerBase
