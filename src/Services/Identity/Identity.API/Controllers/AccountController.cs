@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Identity.API.Infrastructure;
 using Identity.API.Models;
 using Identity.API.Models.AccountViewModels;
 using Identity.API.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -77,18 +79,39 @@ namespace Identity.API.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            var redirectUrl = await _loginService.LoginAsync(model);
+
+            if (string.IsNullOrEmpty(redirectUrl))
             {
                 ModelState.AddModelError("", "Invalid username or password.");
                 ViewData["ReturnUrl"] = model.ReturnUrl;
-                return View();
+                return View(new LoginViewModel
+                {
+                    Email = model.Email,
+                    RememberMe = model.RememberMe,
+                    ReturnUrl = model.ReturnUrl
+                });
             }
 
-            var redirect = await _loginService.LoginAsync(model);
+            return Redirect(redirectUrl);
+        }
 
-            var url = string.IsNullOrEmpty(redirect) ? "~/" : redirect;
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            // invalidate cookies
+            await HttpContext.SignOutAsync();
 
-            return Redirect(url);
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+
+            // set this so UI rendering sees an anonymous user
+            HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+
+            // get context information (client name, post logout redirect URI and iframe for federated signout)
+            var logout = await _loginService.GetLogoutContextAsync(logoutId);
+
+            return Redirect(logout?.PostLogoutRedirectUri);
         }
 
         [HttpGet]

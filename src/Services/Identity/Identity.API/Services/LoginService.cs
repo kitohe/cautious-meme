@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Identity.API.Models;
 using Identity.API.Models.AccountViewModels;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -59,6 +60,11 @@ namespace Identity.API.Services
             await _signInManager.SignInAsync(user, props);
 
             return _interaction.IsValidReturnUrl(viewModel.ReturnUrl) ? viewModel.ReturnUrl : string.Empty;
+        }
+
+        public async Task<LogoutRequest> GetLogoutContextAsync(string logoutId)
+        {
+            return await _interaction.GetLogoutContextAsync(logoutId);
         }
     }
 }

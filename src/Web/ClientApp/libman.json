@@ -27,15 +27,14 @@
       "files": [
         "jquery.validate.min.js"
       ]
+    },
+    {
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [
+        "jquery.min.js",
+        "jquery.min.map"
+      ]
     }
-  ,
-{
-  "library": "jquery@3.5.1",
-  "destination": "wwwroot/lib/jquery/",
-  "files": [
-    "jquery.min.js",
-    "jquery.min.map"
   ]
-}
-]
 }
