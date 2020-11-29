@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Identity.API.Infrastructure;
 using Identity.API.Models;
 using Identity.API.Models.AccountViewModels;
 using Identity.API.Services;
-using IdentityServer4.Services;
-using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Identity.API.Controllers
 {
-    [Authorize]
+    [SecurityHeaders]
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
@@ -30,7 +29,6 @@ namespace Identity.API.Controllers
             _loginService = loginService ?? throw new ArgumentNullException(nameof(loginService));
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult Register(string returnUrl = null)
         {
@@ -38,7 +36,6 @@ namespace Identity.API.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
@@ -69,7 +66,6 @@ namespace Identity.API.Controllers
 
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
@@ -77,7 +73,6 @@ namespace Identity.API.Controllers
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -96,7 +91,6 @@ namespace Identity.API.Controllers
             return Redirect(url);
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult ForgotPassword(string returnUrl)
         {

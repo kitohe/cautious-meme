@@ -8,6 +8,9 @@ using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using StackExchange.Redis;
 
 namespace Identity.API
 {
@@ -33,6 +37,17 @@ namespace Identity.API
                 .AddRazorRuntimeCompilation();
 
             services.AddDatabase(Configuration);
+
+            services.AddDataProtection(opts =>
+                {
+                    opts.ApplicationDiscriminator = "cmessaging.identity";
+                })
+                .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(Configuration["Redis"]), "DataProtection-Keys")
+                .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
+                {
+                    EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+                    ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+                });
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddRoles<IdentityRole>()
@@ -55,10 +70,9 @@ namespace Identity.API
             
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
             app.UseIdentityServer();
-            app.UseAuthentication();
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None }); // order matters
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -95,11 +109,11 @@ namespace Identity.API
                 context.SaveChanges();
             }
 
-            if (!context.ApiResources.Any())
+            if (!context.ApiScopes.Any())
             {
                 foreach (var resource in Config.Apis)
                 {
-                    context.ApiResources.Add(resource.ToEntity());
+                    context.ApiScopes.Add(resource.ToEntity());
                 }
 
                 context.SaveChanges();
@@ -166,6 +180,8 @@ namespace Identity.API
             services.AddScoped<IRedirectService, RedirectService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IProfileService, ProfileService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }

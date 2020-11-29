@@ -10,6 +10,9 @@ services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
 
+  redis:
+    image: redis:alpine
+
   messaging.api:
     image: ${DOCKER_REGISTRY-}messagingapi
     build:
@@ -22,7 +25,14 @@ services:
       context: .
       dockerfile: Services/Identity/Identity.API/Dockerfile
 
+  clientapp:
+    image: ${DOCKER_REGISTRY-}clientapp
+    build:
+      context: .
+      dockerfile: Web/ClientApp/Dockerfile
+
 networks:
   default:
     external:
       name: cmessaging
+
