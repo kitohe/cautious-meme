@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.DataProtection.StackExchangeRedis;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using StackExchange.Redis;
@@ -43,7 +42,7 @@ namespace ClientApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                IdentityModelEventSource.ShowPII = true;
+                //IdentityModelEventSource.ShowPII = true;
             }
             else
             {
@@ -51,9 +50,9 @@ namespace ClientApp
             }
 
             app.UseStaticFiles();
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None });
 
             app.UseRouting();
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -81,7 +80,7 @@ namespace ClientApp
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = "oidc";
                 })
-                .AddCookie("Cookie")
+                .AddCookie("Cookies")
                 .AddOpenIdConnect("oidc", options =>
                 {
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;

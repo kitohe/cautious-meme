@@ -53,7 +53,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ASPNETCORE_URLS=http://+:80
       - CLIENT_APP=http://${APP_EXTERNAL_DNS_NAME_OR_IP}:5500
-      - SEED_DATABASE=false
+      - SEED_DATABASE=true
     ports:
       - "5000:80"
     restart: always
@@ -64,7 +64,6 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ASPNETCORE_URLS=http://+:80
       - IDENTITY_URL=http://${APP_EXTERNAL_DNS_NAME_OR_IP}:5000
-      - CALLBACK_URL=http://${APP_EXTERNAL_DNS_NAME_OR_IP}:5500
     ports:
       - "5500:80"
     restart: always

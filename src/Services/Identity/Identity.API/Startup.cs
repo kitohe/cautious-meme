@@ -70,10 +70,9 @@ namespace Identity.API
             
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
             app.UseIdentityServer();
-            app.UseAuthentication();
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None });
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -181,6 +180,8 @@ namespace Identity.API
             services.AddScoped<IRedirectService, RedirectService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IProfileService, ProfileService>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }
