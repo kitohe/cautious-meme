@@ -1,4 +1,5 @@
-﻿ using System.ComponentModel.DataAnnotations;
+﻿ using System.ComponentModel;
+ using System.ComponentModel.DataAnnotations;
 
  namespace Identity.API.Models.AccountViewModels
 {
@@ -31,6 +32,7 @@
         public string Password { get; init; }
 
         [Required]
+        [DisplayName("Confirm password")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; init; }

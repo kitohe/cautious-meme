@@ -77,18 +77,21 @@ namespace Identity.API.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            var redirectUrl = await _loginService.LoginAsync(model);
+
+            if (string.IsNullOrEmpty(redirectUrl))
             {
                 ModelState.AddModelError("", "Invalid username or password.");
                 ViewData["ReturnUrl"] = model.ReturnUrl;
-                return View();
+                return View(new LoginViewModel
+                {
+                    Email = model.Email,
+                    RememberMe = model.RememberMe,
+                    ReturnUrl = model.ReturnUrl
+                });
             }
 
-            var redirect = await _loginService.LoginAsync(model);
-
-            var url = string.IsNullOrEmpty(redirect) ? "~/" : redirect;
-
-            return Redirect(url);
+            return Redirect(redirectUrl);
         }
 
         [HttpGet]
