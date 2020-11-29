@@ -72,7 +72,7 @@ namespace Identity.API
             app.UseRouting();
 
             app.UseIdentityServer();
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None });
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None }); // order matters
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
