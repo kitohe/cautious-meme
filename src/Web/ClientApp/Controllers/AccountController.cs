@@ -6,9 +6,14 @@ namespace ClientApp.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Login()
         {
-            return RedirectToAction(nameof(Index), "Home");
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Logout()
+        {
+            return SignOut("Cookies", "oidc");
         }
     }
 }

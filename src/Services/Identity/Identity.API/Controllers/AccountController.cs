@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Identity.API.Infrastructure;
 using Identity.API.Models;
 using Identity.API.Models.AccountViewModels;
 using Identity.API.Services;
+using IdentityModel;
+using IdentityServer4;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -92,6 +96,24 @@ namespace Identity.API.Controllers
             }
 
             return Redirect(redirectUrl);
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            // invalidate cookies
+            await HttpContext.SignOutAsync();
+
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+
+            // set this so UI rendering sees an anonymous user
+            HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+
+            // get context information (client name, post logout redirect URI and iframe for federated signout)
+            var logout = await _loginService.GetLogoutContextAsync(logoutId);
+
+            return Redirect(logout?.PostLogoutRedirectUri);
         }
 
         [HttpGet]
