@@ -7,8 +7,6 @@ using Identity.API.Infrastructure;
 using Identity.API.Models;
 using Identity.API.Models.AccountViewModels;
 using Identity.API.Services;
-using IdentityModel;
-using IdentityServer4;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
