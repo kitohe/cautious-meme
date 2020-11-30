@@ -24,11 +24,11 @@ namespace Identity.API
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -36,13 +36,13 @@ namespace Identity.API
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
-            services.AddDatabase(Configuration);
+            services.AddDatabase(_configuration);
 
             services.AddDataProtection(opts =>
                 {
                     opts.ApplicationDiscriminator = "cmessaging.identity";
                 })
-                .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(Configuration["Redis"]), "DataProtection-Keys")
+                .PersistKeysToStackExchangeRedis(ConnectionMultiplexer.Connect(_configuration["Redis"]), "DataProtection-Keys")
                 .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
                 {
                     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
@@ -54,7 +54,7 @@ namespace Identity.API
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddCustomIdentityServer(Configuration);
+            services.AddCustomIdentityServer(_configuration);
 
             services.RegisterServices();
         }

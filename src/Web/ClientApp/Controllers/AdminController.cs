@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using ClientApp.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
 
 namespace ClientApp.Controllers
 {
@@ -26,7 +22,7 @@ namespace ClientApp.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ApiTest()
+        public async Task<IActionResult> MessagingApiTest()
         {
             _logger.LogInformation("Executing ADMIN function");
 
