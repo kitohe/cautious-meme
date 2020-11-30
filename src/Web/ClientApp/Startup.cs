@@ -1,5 +1,6 @@
 using System;
 using ClientApp.Infrastructure;
+using ClientApp.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.Builder;
@@ -17,12 +18,12 @@ namespace ClientApp
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -30,9 +31,9 @@ namespace ClientApp
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
-            services.AddCustomMvc(Configuration);
-            services.AddCustomAuthentication(Configuration);
-            services.AddHttpClientServices(Configuration);
+            services.AddCustomMvc(_configuration);
+            services.AddCustomAuthentication(_configuration);
+            services.AddHttpClientServices(_configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +42,6 @@ namespace ClientApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //IdentityModelEventSource.ShowPII = true;
             }
             else
             {
@@ -103,11 +103,6 @@ namespace ClientApp
                 });
 
             services.AddAccessTokenManagement();
-
-            // services.AddUserAccessTokenClient("client", client =>
-            // {
-            //     client.BaseAddress = new Uri(Constants.SampleApi);
-            // });
         }
 
         public static void AddCustomMvc(this IServiceCollection services, IConfiguration configuration)
@@ -140,6 +135,9 @@ namespace ClientApp
 
             //set 5 min as the lifetime for each HttpMessageHandler int the pool
             services.AddHttpClient("extendedhandlerlifetime").SetHandlerLifetime(TimeSpan.FromMinutes(5));
+
+            services.AddHttpClient<IAdminService, AdminService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
         }
     }
 }

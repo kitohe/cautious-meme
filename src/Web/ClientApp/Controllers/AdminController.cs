@@ -1,6 +1,8 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using ClientApp.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,10 +13,12 @@ namespace ClientApp.Controllers
     public class AdminController : Controller
     {
         private readonly ILogger<AdminController> _logger;
+        private readonly IAdminService _adminService;
 
-        public AdminController(ILogger<AdminController> logger)
+        public AdminController(ILogger<AdminController> logger, IAdminService adminService)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _adminService = adminService ?? throw new ArgumentNullException(nameof(adminService));
         }
 
         public async Task<IActionResult> ClaimsSummary()
@@ -24,15 +28,12 @@ namespace ClientApp.Controllers
 
         public async Task<IActionResult> ApiTest()
         {
-            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            _logger.LogInformation("Executing ADMIN function");
 
-            _logger.LogInformation("Entered admin func");
+            var result = await _adminService.TestMessagingApiEndpoint();
 
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var content = await client.GetStringAsync("http://messaging.api/api/v1/test/TestApi");
+            ViewBag.Result = result;
 
-            ViewBag.Json = JArray.Parse(content).ToString();
             return View();
         }
     }
